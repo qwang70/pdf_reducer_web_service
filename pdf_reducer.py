@@ -5,6 +5,7 @@ import argparse
 from PyPDF2 import PdfFileWriter, PdfFileReader
 
 def createFile(fp):
+    # check if file can be opened
     try:
         f = open(fp)
     except IOError as e:
@@ -12,10 +13,11 @@ def createFile(fp):
     except:
         print "Unexpected error:", sys.exc_info()[0]
         raise
-
+    # read pdf with PyPDF2
     PDF = PdfFileReader(file(fp, 'rb'))
     output = PdfFileWriter()
 
+    # rtn is the page to be outputed
     rtn = []
     idx = PDF.getNumPages()-1
     prev = ""
@@ -28,15 +30,17 @@ def createFile(fp):
             rtn.append(i)
             idx = i - 1
             continue
+        # set the page length of last idxed page
         if len(curr)>len(prev):
             length = len(prev)
         else:
             length = len(curr)
-
+        # calculate the similarity btw last page and curr page
         seq=difflib.SequenceMatcher(lambda x: x == " ",
                 curr[0:length], prev[0:length])
         ratio = seq.ratio()
-        print "page is {}, ratio is {}".format(i, ratio)
+        # print "page is {}, ratio is {}".format(i, ratio)
+        # decision making, update index
         if(ratio<0.8):
             rtn.append(idx)
             idx = i
@@ -45,7 +49,9 @@ def createFile(fp):
         rtn.append(0)
     #print rtn 
 
+    # backward idx to forward idx
     rtn.reverse()
+    # add page numbers to output
     for i in rtn:
         p = PDF.getPage(i)
         output.addPage(p)
@@ -55,16 +61,21 @@ def createFile(fp):
        output.write(f)
 
 def main():
+    # input checking and utility
     parser = argparse.ArgumentParser(description='Reduce duplicated PDF pages')
-    parser.add_argument('String', metavar='pdf_filename', type=str, nargs='+',
-                    help='PDF files to be reduced')
+    parser.add_argument('-m', '--merge', help='merge PDF files')
+    parser.add_argument('filenames',type=str, nargs='+',
+                    help='PDF files to be reduced or merged')
     args = parser.parse_args()
+    """
+    # list of files
     files = []
-    for i in sys.argv[1:]:
+    for i in args.filenames:
         files = files + glob.glob(i)
 
     for a_file in files:
         createFile(a_file);
+    """
 
 if __name__ == '__main__':
     main()
