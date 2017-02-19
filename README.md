@@ -1,1 +1,1 @@
-# pdf_reducer
+# pdf_reducer Web Service
