@@ -2,19 +2,33 @@ import difflib
 import glob
 import sys
 import argparse
-from PyPDF2 import PdfFileWriter, PdfFileReader
+from PyPDF2 import PdfFileWriter, PdfFileReader, PdfFileMerger
 
-def createFile(fp):
+def mergeFile(files):
+	merger = PdfFileMerger()
+	for f in (files):
+		# check if file can be opened
+		try:
+			# read and merge pdf with pypdf2
+			merger.append(PdfFileReader(file(f, 'rb')))
+		except IOError as e:
+			print "I/O error: Please input an existing pdf file"
+		except:
+			print "Unexpected error:", sys.exc_info()[0]
+			raise
+    #TODO: need to change output path later
+	merger.write("output/output.pdf")
+
+def reduceFile(fp):
     # check if file can be opened
     try:
-        f = open(fp)
+		# read pdf with pypdf2
+		pdf = pdffilereader(file(fp, 'rb'))
     except IOError as e:
         print "I/O error: Please input an existing pdf file"
     except:
         print "Unexpected error:", sys.exc_info()[0]
         raise
-    # read pdf with PyPDF2
-    PDF = PdfFileReader(file(fp, 'rb'))
     output = PdfFileWriter()
 
     # rtn is the page to be outputed
@@ -56,6 +70,7 @@ def createFile(fp):
         p = PDF.getPage(i)
         output.addPage(p)
 
+    #TODO: need to change output path later
     newfile = fp[0:-4]+"_reduced.pdf"
     with open(newfile, 'wb') as f:
        output.write(f)
@@ -63,19 +78,21 @@ def createFile(fp):
 def main():
     # input checking and utility
     parser = argparse.ArgumentParser(description='Reduce duplicated PDF pages')
-    parser.add_argument('-m', '--merge', help='merge PDF files')
+    parser.add_argument('-m', '--merge',action='store_true',help='merge PDF files')
     parser.add_argument('filenames',type=str, nargs='+',
                     help='PDF files to be reduced or merged')
     args = parser.parse_args()
-    """
     # list of files
     files = []
     for i in args.filenames:
         files = files + glob.glob(i)
 
-    for a_file in files:
-        createFile(a_file);
-    """
+    # merge
+    if args.merge:
+        mergeFile(files);
+    else:
+        for a_file in files:
+            reduceFile(a_file);
 
 if __name__ == '__main__':
     main()
