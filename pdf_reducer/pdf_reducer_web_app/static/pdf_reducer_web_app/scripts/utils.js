@@ -57,7 +57,7 @@
     });
 
     $("#upload-btn").click(function (ev) { 
-        e.preventDefault();
-        alert("王启雯么么哒")
+        ev.preventDefault();
+        alert("王启雯我们来两发吧")
     });
 })(this);
