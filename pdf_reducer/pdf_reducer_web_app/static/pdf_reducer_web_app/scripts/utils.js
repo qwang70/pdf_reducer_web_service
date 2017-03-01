@@ -44,7 +44,7 @@
 
     $("#drop-area").on("drop", function (ev) {
         ev.preventDefault();
-        var file = ev.dataTransfer.files[0];
+        var file = ev.originalEvent.dataTransfer.files[0];
         validateFile(file.name);
         $("#drop-area").removeClass("drop-active");
         $("#drop-area").addClass("drop-non-active");
