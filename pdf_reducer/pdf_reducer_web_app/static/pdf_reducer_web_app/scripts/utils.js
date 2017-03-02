@@ -1,5 +1,6 @@
 /**
  * @todo input field is always valid due to framework issues
+ * @todo check chrome's input validation scheme
  */
 
 (function (globals) {
@@ -18,18 +19,13 @@
         }
     }
 
-    /**
-     * @param {Event} ev submit event
-     */
-    function uploadToServer(ev) {
-        event.preventDefault();
-        if (isFileSelected) {
-            //upload the file to the server
-        }
-    }
     var isFileReady = false;            //if a file has been selected
     var dropArea = document.getElementById("drop-area");
-    var serverAddr = "www.pdfreducer.me";
+    var serverAddr = "/test_upload";
+    var fileInputName = "file_input";
+    var pathInputName = "path_name";
+    var tokenName = "csrfmiddlewaretoken";
+    var uploadFile;
 
     $("#drop-area").on("dragover", function (ev) {
         ev.preventDefault();
@@ -50,14 +46,35 @@
         $("#drop-area").addClass("drop-non-active");
         $("#path-name").addClass("valid");
         $("#path-name").val(file.name);
+        uploadFile = file;
     });
 
     $("#file-input").change(function (ev) {
         validateFile(ev.target.value);
+        uploadFile = ev.target.files[0];
     });
 
     $("#upload-btn").click(function (ev) { 
         ev.preventDefault();
-        alert("王启雯我们来两发吧")
+       /*
+        *drop and upload events:
+        1.create a function wise global variable to store form data
+        2.create a function wise variable to store file data
+        3.let html5 file input and drop event do its own thing
+       */ 
+       var uploadData = new FormData();
+       uploadData.set(pathInputName, uploadFile.name);
+       uploadData.set(fileInputName, uploadFile);
+       uploadData.set(tokenName, $("[name='csrfmiddlewaretoken']").val());
+       $.ajax({
+           type: "POST",
+           url: serverAddr ,
+           data: uploadData,
+           processData: false,  //prevent jquery from messing with data
+           contentType: false,  //prevent jquery from messing with boundary
+           success: function (response) {
+                console.log("success");
+           }
+       });
     });
 })(this);
