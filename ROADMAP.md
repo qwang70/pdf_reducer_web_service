@@ -1,8 +1,11 @@
 # PDF Reducer ROADMAP
 
 ## PDF reduce
-- [ ] single file upload
-- [ ] multiple files upload
+- [ ] File upload request
+    - [x] Single file
+    - [ ] Multiple file
+
+- [ ] File upload response
 
 ## PDF merge
 
