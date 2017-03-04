@@ -18,6 +18,10 @@ body {
     border: 10px dashed #999;
 }
 
+#download {
+    visibility: hidden;
+}
+
 .area-dscrp {
     margin: 0 0 10px 0;
     font-weight: bold;

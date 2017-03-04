@@ -73,7 +73,7 @@
            processData: false,  //prevent jquery from messing with data
            contentType: false,  //prevent jquery from messing with boundary
            success: function (response) {
-                console.log("success");
+               $("#download").css("visibility", "visible").attr("href", response);
            }
        });
     });

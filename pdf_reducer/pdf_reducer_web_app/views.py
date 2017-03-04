@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .forms import UploadForm
-from .service import dummy_service
+from .service import pdf_reduce
 from django.http import HttpResponse
 
 # Create your views here.
@@ -12,5 +12,5 @@ def index(request):
 def test_upload(request):
     """test if the upload works"""
     if request.method == 'POST':
-        dummy_service(request)
-    return HttpResponse("hello world")
+        link = pdf_reduce(request)
+    return HttpResponse(link)
