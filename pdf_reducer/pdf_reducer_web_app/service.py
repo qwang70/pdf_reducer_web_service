@@ -92,7 +92,6 @@ def pdf_reduce(request):
         output.addPage(curr_page)
 
     new_file_name = file_name[0:4] + "_reduced.pdf"
-    new_file = file_pointer[0:-4] + "_reduced.pdf"
     with open(path_to_file + new_file_name, 'wb') as curr_file:
         output.write(curr_file)
     return settings.MEDIA_URL + new_file_name
