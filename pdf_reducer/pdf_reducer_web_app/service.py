@@ -31,8 +31,8 @@ def dummy_service(request):
 def pdf_reduce(request):
     '''
     Reduce the pdf file from `django.http.HttpRequest`.
-    
-    It returns a link to the reduced file 
+
+    It returns a link to the reduced file
     '''
     file_name = 'test_file.pdf'
     path_to_file = settings.MEDIA_ROOT
