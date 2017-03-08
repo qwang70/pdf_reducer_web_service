@@ -1,2 +1,5 @@
 # PDF Reducer Web Service
-![Hello World](https://upload.wikimedia.org/wikipedia/en/5/50/Cardcaptor_Sakura_vol1_cover.jpg)
+![center](http://www.pixiv.net/member_illust.php?mode=medium&illust_id=61769262)
+.center {
+  text-align: center;
+}
