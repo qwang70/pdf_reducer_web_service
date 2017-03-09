@@ -3,15 +3,20 @@ html {
 }
 
 body {
-    position: relative;
-    min-width: 980px;
-    min-height: 100%;
-    padding-bottom: 220px;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    transition: background-color 0.5s;
 }
 
-footer {
-    position: absolute;
-    bottom: 0;
+body.active {
+    background-color: #e6f2ff;
+}
+
+main {
+    flex: 1 0 auto;
+    position: relative;
+    min-height: 200px;
 }
 
 .collection-header {
@@ -22,9 +27,33 @@ footer {
     font-weight: 500;
 }
 
+.msg-ctn {
+    position: absolute;
+    height: 200px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    font-size: 17px;
+    color: #aaa;
+}
+
+.upload-btn.active {
+    color: #aaa;
+}
+
+.preloader-wrapper.tiny {
+    width: 28px;
+    height: 28px;
+}
+
 #file-list {
     margin-top: 20px;
+    transition: background-color 0.5s;
 }
+
 
 #drop-area {
     display: flex;

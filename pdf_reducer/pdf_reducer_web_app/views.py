@@ -13,8 +13,9 @@ def index(request):
 def test_upload(request):
     """test if the upload works"""
     if request.method == 'POST':
-        link = pdf_reduce(request)
-    return HttpResponse(link)
+        #put your function here
+        pass
+    return HttpResponse()
 
 class FileUploadView(FormView):
     '''
