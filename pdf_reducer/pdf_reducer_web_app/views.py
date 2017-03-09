@@ -1,7 +1,8 @@
 from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse
+from django.views.generic.edit import FormView
 from .forms import UploadForm
 from .service import pdf_reduce
-from django.http import HttpResponse
 
 # Create your views here.
 def index(request):
@@ -14,3 +15,25 @@ def test_upload(request):
     if request.method == 'POST':
         link = pdf_reduce(request)
     return HttpResponse(link)
+
+class FileUploadView(FormView):
+    '''
+    TODO form validation
+    '''
+    form_class = UploadForm
+    template_name = 'pdf_reducer_web_app/index.html'
+
+    def form_valid(self, form):
+        link = pdf_reduce(self.request)
+        data = {'download-url': link}
+        return JsonResponse(data)
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        files = request.FILES.getlist('file_input')
+        service_method = request.POST['service-method']
+        if service_method == "reduce_and_merge":
+            pass
+        elif service_method == "reduce":
+            pass
