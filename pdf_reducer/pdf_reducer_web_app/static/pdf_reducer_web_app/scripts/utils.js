@@ -62,7 +62,7 @@
             processData: false,  //prevent jquery from messing with data
             contentType: false,  //prevent jquery from messing with boundary
             success: function (response) {
-                $("#download-btn").toggleClass("disabled").attr("href", response);
+                $("#download-btn").attr("href", response);
             }
         });
     }
@@ -124,6 +124,7 @@
     });
 
     $("#uploading-cover").hide();
+    $("#download-btn").hide();
     $(document).
         ajaxStart(function () {
             $("#uploading-cover").show()
@@ -131,12 +132,19 @@
         .ajaxStop(function () {
             $("#uploading-cover").hide()
             Materialize.toast('Uploads Done!', 4000)
+            $("#download-btn").show();
         });
 
-    $("#upload-btn").click(function (e) {
+    $("#reduce-btn").click(function (e) {
         e.preventDefault();
         e.stopPropagation();
         uploadToServer(false);
+    });
+
+    $("#merge-btn").click(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadToServer(true);
     });
 
     collectionNa();
