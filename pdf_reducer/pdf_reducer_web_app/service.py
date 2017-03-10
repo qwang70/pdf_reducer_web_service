@@ -1,7 +1,7 @@
 """
 Service functions for the web app.
 """
-# lib input django 
+# lib input django
 from django.core.files import File
 from django.conf import settings
 # lib input PyPdf2
@@ -15,6 +15,7 @@ import glob
 import zipfile
 import random
 
+
 def pdf_reduce(request):
     '''
     Reduce the pdf file from `django.http.HttpRequest`.
@@ -24,13 +25,14 @@ def pdf_reduce(request):
     file_list = request.FILES.getlist("file-input")
     file_name = list(map(lambda x: x.name, file_list))
     random_dir = "%032x" % random.getrandbits(128)
-    path_to_file = "{}{}/".format(settings.MEDIA_ROOT,random_dir)
+    path_to_file = "{}{}/".format(settings.MEDIA_ROOT, random_dir)
+    link_to_file = "{}{}/".format(settings.MEDIA_URL, random_dir)
     try:
         os.makedirs(path_to_file)
-    except: 
+    except:
         pass
 
-    newfiles = reduceFile(file_list,path_to_file)
+    newfiles = reduceFile(file_list, path_to_file)
 
     if len(newfiles) == 1:
         return newfiles[0]
@@ -41,9 +43,10 @@ def pdf_reduce(request):
         name_zip = list(zip(newfiles, file_name))
         with zipfile.ZipFile(comp_fn, "w") as myzip:
             for path_fn, fn in name_zip:
-                myzip.write(path_fn, arcname = fn)
-    
-        return comp_fn
+                myzip.write(path_fn, arcname=fn)
+
+        return link_to_file + "reduced_files.zip"
+
 
 def pdf_merge(request):
     '''
@@ -52,13 +55,13 @@ def pdf_merge(request):
     It returns a link to the merged file
     '''
     file_list = request.FILES.getlist("file-input")
-    file_name = list(map(lambda x: x.name, file_list))
-    
+
     random_dir = "%032x" % random.getrandbits(128)
-    path_to_file = "{}{}/".format(settings.MEDIA_ROOT,random_dir)
+    path_to_file = "{}{}/".format(settings.MEDIA_ROOT, random_dir)
+    link_to_file = "{}{}/".format(settings.MEDIA_URL, random_dir)
     try:
         os.makedirs(path_to_file)
-    except: 
+    except:
         pass
 
     merger = PdfFileMerger()
@@ -75,9 +78,10 @@ def pdf_merge(request):
             print(fp, ": Unexpected error - ", sys.exc_info()[0])
             raise
     # TODO: need to change output path later
-    newfile = path_to_file+"merged.pdf"
+
+    newfile = path_to_file + "merged.pdf"
     merger.write(newfile)
-    return newfile
+    return link_to_file + "merged.pdf"
 
 
 def reduceFile(files, path_to_file):
