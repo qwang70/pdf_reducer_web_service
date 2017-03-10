@@ -1,7 +1,7 @@
 html {
-    height: 100%;
+    /*This is a hack to solve the white space on the right side of the window*/
+    overflow-x: hidden;
 }
-
 body {
     display: flex;
     min-height: 100vh;
@@ -17,17 +17,31 @@ main {
     flex: 1 0 auto;
     position: relative;
     min-height: 200px;
-}
-
-.collection-header {
-    vertical-align: middle;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .home-title {
     font-weight: 500;
 }
 
-.msg-ctn {
+.preloader-wrapper.tiny {
+    width: 28px;
+    height: 28px;
+}
+
+.h-center-b {
+    margin: 0 auto;
+}
+#btn-ctn {
+    float: right;
+}
+
+#file-list {
+    transition: background-color 0.5s;
+}
+
+#msg-ctn {
     position: absolute;
     height: 200px;
     top: 0;
@@ -40,48 +54,12 @@ main {
     color: #aaa;
 }
 
-.upload-btn.active {
-    color: #aaa;
-}
-
-.preloader-wrapper.tiny {
-    width: 28px;
-    height: 28px;
-}
-
-#file-list {
-    margin-top: 20px;
-    transition: background-color 0.5s;
-}
-
-
-#drop-area {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 100px auto;
-    height: 400px;
-    border-radius: 30px;
-    text-align: center;
-    transition: background-color 0.5s, border 0.5s;
-    border: 10px dashed #999;
-}
-
-#download {
-    visibility: hidden;
-}
-
-.area-dscrp {
-    margin: 0 0 10px 0;
-    font-weight: bold;
-    font-size: 20px;
-    color: #999;
-}
-
-.drop-non-active {
-    background-color: #e6e6e6;
-}
-
-.drop-active {
-    background-color: #e6f2ff;
+#uploading-cover {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 5;
 }
