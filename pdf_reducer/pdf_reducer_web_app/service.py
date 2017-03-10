@@ -39,11 +39,9 @@ def pdf_reduce(request):
     else:
         # compress file into a tar file
         comp_fn = path_to_file + "reduced_files.zip"
-        # name_zip = [(reduced_pdf_path, pdf_name)]
-        name_zip = list(zip(newfiles, file_name))
         with zipfile.ZipFile(comp_fn, "w") as myzip:
-            for path_fn, fn in name_zip:
-                myzip.write(path_fn, arcname=fn)
+            for path_fn in newfiles:
+                myzip.write(path_fn, arcname=os.path.basename(path_fn))
 
         return link_to_file + "reduced_files.zip"
 
