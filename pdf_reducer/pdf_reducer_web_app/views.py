@@ -23,7 +23,8 @@ def test_upload(request):
         else:
             download_link = pdf_reduce(request)
 
-    return HttpResponse(download_link)
+        return HttpResponse(download_link)
+    return HttpResponse()
 
 class FileUploadView(FormView):
     '''
