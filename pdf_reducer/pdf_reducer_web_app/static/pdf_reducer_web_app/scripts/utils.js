@@ -6,8 +6,8 @@
 
 (function (globals) {
     var serverAddr = "test_upload";
-    var filesKey = "file_input";
-    var modeKey = "service_mode";
+    var filesKey = "file-input";
+    var modeKey = "service-mode";
     var tokenName = "csrfmiddlewaretoken";
     /**
     * Update the contents in the main area
@@ -62,9 +62,7 @@
             processData: false,  //prevent jquery from messing with data
             contentType: false,  //prevent jquery from messing with boundary
             success: function (response) {
-                console.log("success");
                 $("#download-btn").toggleClass("disabled").attr("href", response);
-                console.log("what");
             }
         });
     }
@@ -132,6 +130,7 @@
         })
         .ajaxStop(function () {
             $("#uploading-cover").hide()
+            Materialize.toast('Uploads Done!', 4000)
         });
 
     $("#upload-btn").click(function (e) {
