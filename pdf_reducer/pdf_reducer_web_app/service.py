@@ -13,7 +13,7 @@ import os
 import difflib
 import glob
 import zipfile
-import hashlib
+import random
 
 def pdf_reduce(request):
     '''
@@ -23,7 +23,12 @@ def pdf_reduce(request):
     '''
     file_list = request.FILES.getlist("file-input")
     file_name = list(map(lambda x: x.name, file_list))
-    path_to_file = settings.MEDIA_ROOT
+    random_dir = "%032x" % random.getrandbits(128)
+    path_to_file = "{}{}/".format(settings.MEDIA_ROOT,random_dir)
+    try:
+        os.makedirs(path_to_file)
+    except: 
+        pass
 
     newfiles = reduceFile(file_list,path_to_file)
 
@@ -40,21 +45,6 @@ def pdf_reduce(request):
     
         return comp_fn
 
-"""
-def pdf_reduceMergeFile(request):
-    '''
-    Merge a list of pdf files from `django.http.HttpRequest`.
-
-    It returns a link to the merged file
-    '''
-    file_list = request.FILES.getlist("file-input")
-    file_name = list(map(lambda x: x.name, file_list))
-    path_to_file = settings.MEDIA_ROOT
-    
-    reduced_filenames = reduceFile(files)
-    mergeFile(reduced_filenames)
-"""
-
 def pdf_merge(request):
     '''
     Merge a list of pdf files from `django.http.HttpRequest`.
@@ -63,7 +53,13 @@ def pdf_merge(request):
     '''
     file_list = request.FILES.getlist("file-input")
     file_name = list(map(lambda x: x.name, file_list))
-    path_to_file = settings.MEDIA_ROOT
+    
+    random_dir = "%032x" % random.getrandbits(128)
+    path_to_file = "{}{}/".format(settings.MEDIA_ROOT,random_dir)
+    try:
+        os.makedirs(path_to_file)
+    except: 
+        pass
 
     merger = PdfFileMerger()
     for fp in file_list:
