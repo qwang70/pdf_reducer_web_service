@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic.edit import FormView
 from .forms import UploadForm
 from .service import pdf_reduce
+from .service import pdf_merge
 
 # Create your views here.
 def index(request):
@@ -12,8 +13,20 @@ def index(request):
 
 def test_upload(request):
     """test if the upload works"""
-    if request.method == 'POST':
-        #put your function here
+    if request.method == 'POST' and len(request.FILES.getlist("file-input")) > 0:
+        merge_mode = request.POST["service-mode"]
+        # call function reduce or merge
+        if merge_mode == 'true':
+            print("enter merge mode")
+            #TODO: should have options between reduce and reduce and merge
+            download_link = pdf_merge(request)
+
+        else:
+            print("enter reduce mode")
+            download_link = pdf_reduce(request)
+
+        print("download link: ", download_link)
+        #request.POST["service-mode"] ->
         pass
     return HttpResponse()
 
