@@ -35,7 +35,7 @@ def pdf_reduce(request):
     newfiles = reduceFile(file_list, path_to_file)
 
     if len(newfiles) == 1:
-        return newfiles[0]
+        return link_to_file + os.path.basename(newfiles[0])
     else:
         # compress file into a tar file
         comp_fn = path_to_file + "reduced_files.zip"
