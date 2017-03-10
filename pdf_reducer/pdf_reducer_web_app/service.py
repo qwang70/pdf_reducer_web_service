@@ -9,27 +9,10 @@ from .utilities.PyPDF2 import PdfFileReader, PdfFileWriter, PdfFileMerger
 # common lib input
 from io import FileIO as file
 import sys
+import os
 import difflib
 import glob
-import tarfile
-
-def dummy_service(request):
-    '''
-
-    HACK: file size is not really calculated
-    HACK: the path to the file is manually set to be MEDIA_ROOT
-    TODO: each file name should be different
-    '''
-    file_name = 'test_file.pdf'
-    path_to_file = 'media/'
-    with open(path_to_file + file_name, 'wb') as in_file:
-        myfile = File(in_file)
-        for chunk in request.FILES['file_input'].chunks():
-            myfile.write(chunk)
-    # chreate the download link for the file
-    link = settings.MEDIA_URL + file_name
-    return link
-
+import zipfile
 
 def pdf_reduce(request):
     '''
@@ -41,28 +24,22 @@ def pdf_reduce(request):
     file_name = list(map(lambda x: x.name, file_list))
     path_to_file = settings.MEDIA_ROOT
 
-    #TODO: chunks
-    """
-    with open(file_pointer, 'wb') as in_file:
-        myfile = File(in_file)
-        for chunk in request.FILES['file_input'].chunks():
-            myfile.write(chunk)
-    """
-
     newfiles = reduceFile(file_list,path_to_file)
 
     if len(newfiles) == 1:
         return newfiles[0]
     else:
         # compress file into a tar file
-        comp_fn = path_to_file + "reduced_files.tar"
-        with tarfile.open(comp_fn, "w") as tar:
-            for name in newfiles:
-                tar.add(name)
+        comp_fn = path_to_file + "reduced_files.zip"
+        # name_zip = [(reduced_pdf_path, pdf_name)]
+        name_zip = list(zip(newfiles, file_name))
+        with zipfile.ZipFile(comp_fn, "w") as myzip:
+            for path_fn, fn in name_zip:
+                myzip.write(path_fn, arcname = fn)
     
         return comp_fn
 
-
+"""
 def pdf_reduceMergeFile(request):
     '''
     Merge a list of pdf files from `django.http.HttpRequest`.
@@ -75,6 +52,7 @@ def pdf_reduceMergeFile(request):
     
     reduced_filenames = reduceFile(files)
     mergeFile(reduced_filenames)
+"""
 
 def pdf_merge(request):
     '''

@@ -17,17 +17,13 @@ def test_upload(request):
         merge_mode = request.POST["service-mode"]
         # call function reduce or merge
         if merge_mode == 'true':
-            print("enter merge mode")
             #TODO: should have options between reduce and reduce and merge
             download_link = pdf_merge(request)
 
         else:
-            print("enter reduce mode")
             download_link = pdf_reduce(request)
 
         print("download link: ", download_link)
-        #request.POST["service-mode"] ->
-        pass
     return HttpResponse()
 
 class FileUploadView(FormView):
