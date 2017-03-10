@@ -5,25 +5,10 @@
  */
 
 (function (globals) {
-    var isFileReady = false;            //if a file has been selected
-    var dropArea = document.getElementById("drop-area");
     var serverAddr = "test_upload";
-    var fileInputName = "file_input";
-    var pathInputName = "path_name";
+    var filesKey = "file_input";
+    var modeKey = "service_mode";
     var tokenName = "csrfmiddlewaretoken";
-    var uploadFile;
-    var preloader = "<div class='preloader-wrapper tiny active'>" +
-        "<div class='spinner-layer spinner-green-only'>" +
-        "<div class='circle-clipper left'>" +
-        "<div class='circle'></div>" +
-        "</div><div class='gap-patch'>" +
-        "<div class='circle'></div>" +
-        "</div><div class='circle-clipper right'>" +
-        "<div class='circle'></div>" +
-        "</div>" +
-        "</div>" +
-        "</div>"
-
     /**
     * Update the contents in the main area
     * @function updateContents
@@ -42,11 +27,7 @@
                     class: "material-icons small del-btn",
                     "data-list-item": li
                 }).text("delete").data("list-item", li);
-                var upIcon = $("<i>", {
-                    class: "material-icons small upload-btn",
-                    "data-list-item": li
-                }).text("file_upload").data("list-item", li);
-                li.append(div.append(decor.append(upIcon).append(delIcon)));
+                li.append(div.append(decor.append(delIcon)));
                 $("#file-list").append(li);
             }
         }
@@ -58,8 +39,7 @@
             }
         }
         if ($(".collection-item").length > 0) {
-            $(".msg-ctn").hide()
-            $("#file-list").show();
+            collectionAvailabe();
         }
     }
 
@@ -73,7 +53,7 @@
         uploadData.set("service-mode", mode);
         uploadData.set(tokenName, $("[name=csrfmiddlewaretoken]").val());
         $(".collection-item").each(function (i) {
-            uploadData.append("file-input", $(this).data("file-content"));
+            uploadData.append(filesKey, $(this).data("file-content"));
         });
         $.ajax({
             type: "POST",
@@ -83,8 +63,30 @@
             contentType: false,  //prevent jquery from messing with boundary
             success: function (response) {
                 console.log("success");
+                $("#download-btn").toggleClass("disabled").attr("href", response);
+                console.log("what");
             }
         });
+    }
+
+    function collectionAvailabe() {
+        $("#msg-ctn").hide()
+        $("#file-list").show();
+        $("#btn-ctn").show();
+    }
+
+    function collectionNa() {
+        $("#msg-ctn").show()
+        $("#file-list").hide();
+        $("#btn-ctn").hide();
+    }
+
+    function uploading() {
+        $("#uploading-cover").show();
+    }
+
+    function noUploading() {
+        $("#uploading-cover").hide();
     }
 
     $("#FOB").click(function (e) {
@@ -99,24 +101,9 @@
         e.preventDefault();
         $(e.target).data("list-item").remove();
         if ($(".collection-item").length == 0) {
-            $(".msg-ctn").show()
-            $("#file-list").hide();
+            collectionNa();
         }
     })
-
-    //Uplaod delegate
-    $("#file-list").delegate(".upload-btn", "click", function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        console.log("upload btn clicked");
-        $(e.target).replaceWith(preloader);
-    })
-
-    //prevent container from opening a link
-    $("#file-list").delegate(".secondary-content", "click", function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-    });
 
     //Drag and Drop handler
     $("body").on("dragenter dragleave", function (e) {
@@ -138,18 +125,23 @@
         updateContents(files);
     });
 
-    $("#file-list").hide();
+    $("#uploading-cover").hide();
+    $(document).
+        ajaxStart(function () {
+            $("#uploading-cover").show()
+        })
+        .ajaxStop(function () {
+            $("#uploading-cover").hide()
+        });
 
-    //Below is test code
-    $("#test-reduce").click(function (e) {
+    $("#upload-btn").click(function (e) {
         e.preventDefault();
         e.stopPropagation();
         uploadToServer(false);
     });
 
-    $("#test-merge").click(function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        uploadToServer(true);
-    });
+    collectionNa();
+
+    //Below is test code
+
 })(this);

@@ -13,6 +13,7 @@ import os
 import difflib
 import glob
 import zipfile
+import hashlib
 
 def pdf_reduce(request):
     '''
