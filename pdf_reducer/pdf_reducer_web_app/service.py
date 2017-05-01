@@ -25,8 +25,8 @@ def pdf_reduce(request):
     file_list = request.FILES.getlist("file-input")
     file_name = list(map(lambda x: x.name, file_list))
     random_dir = "%032x" % random.getrandbits(128)
-    path_to_file = "{}{}/".format(settings.MEDIA_ROOT, random_dir)
-    link_to_file = "{}{}/".format(settings.MEDIA_URL, random_dir)
+    path_to_file = "{}{}/".format(settings.STATIC_ROOT, random_dir)
+    link_to_file = "{}{}/".format(settings.STATIC_URL, random_dir)
     try:
         os.makedirs(path_to_file)
     except:
@@ -55,8 +55,8 @@ def pdf_merge(request):
     file_list = request.FILES.getlist("file-input")
 
     random_dir = "%032x" % random.getrandbits(128)
-    path_to_file = "{}{}/".format(settings.MEDIA_ROOT, random_dir)
-    link_to_file = "{}{}/".format(settings.MEDIA_URL, random_dir)
+    path_to_file = "{}{}/".format(settings.STATIC_ROOT, random_dir)
+    link_to_file = "{}{}/".format(settings.STATIC_URL, random_dir)
     try:
         os.makedirs(path_to_file)
     except:
